@@ -8,17 +8,26 @@ public class EchoClient
 			/* make connection to server socket */
 			Socket sock = new Socket("127.0.0.1",6013);
 
-			InputStream in = sock.getInputStream();
-			BufferedReader bin = new
-			BufferedReader(new InputStreamReader(in));
+			BufferedReader read = new BufferedReader(new InputStreamReader(sock.getInputStream()));
+			BufferedReader connection = new BufferedReader(new InputStreamReader(System.in));
+			PrintWriter writer = new PrintWriter(sock.getOutputStream(), true); 
+			
 
-			/* read the date from the socket */
-			String line;
-			while ( (line = bin.readLine()) != null)
-			System.out.println(line);
-		
+			/* Reads user input from the client and stores it into PrintWriter which than sends it
+			   to the OutputStream which is than printed by the client */
+
+			String input;
+
+			do {
+
+				input = read.readLine();
+				if ( input != null )
+					System.out.println(input);
+				input = connection.readLine();
+				writer.println(input);
+			}
+			while (!input.trim().equals("."));
 			/* close the socket connection*/
-			sock.close();
 		}		
 		catch (IOException ioe) {
 		System.err.println(ioe);
